@@ -1,0 +1,64 @@
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ---------------------------------------
+# File Name
+# ---------------------------------------
+file_name = "weather.csv"
+
+# ---------------------------------------
+# Check if file exists
+# ---------------------------------------
+if not os.path.exists(file_name):
+    print("\n❌ ERROR: 'weather.csv' file not found!")
+    print("👉 Place weather.csv in the SAME folder as this Python file.")
+    print("👉 Or give the full path, e.g.: C:/Users/asus/Desktop/weather.csv")
+    exit()
+
+# ---------------------------------------
+# Load Data
+# ---------------------------------------
+df = pd.read_csv(file_name)
+
+# ---------------------------------------
+# Convert date column safely
+# ---------------------------------------
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
+df = df.dropna(subset=['date'])  # remove invalid dates
+
+# Sort by date
+df = df.sort_values(by='date')
+
+# ---------------------------------------
+# Print Dataset Info
+# ---------------------------------------
+print("\n--- Dataset Head ---")
+print(df.head())
+
+print("\n--- Dataset Summary ---")
+print(df.describe())
+
+# ---------------------------------------
+# Plotting
+# ---------------------------------------
+plt.figure(figsize=(12, 8))
+
+# Temperature Plot
+plt.subplot(2, 1, 1)
+plt.plot(df['date'], df['temperature'], marker='o', linestyle='--')
+plt.title("Temperature Trend")
+plt.xlabel("Date")
+plt.ylabel("Temperature (°C)")
+plt.grid(True)
+
+# Humidity Plot
+plt.subplot(2, 1, 2)
+plt.plot(df['date'], df['humidity'], marker='o', linestyle='--')
+plt.title("Humidity Trend")
+plt.xlabel("Date")
+plt.ylabel("Humidity (%)")
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
