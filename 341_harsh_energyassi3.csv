@@ -1,0 +1,81 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ---------------------------------------
+# Load CSV File
+# ---------------------------------------
+file_name = "energy_consumption.csv"
+
+try:
+    df = pd.read_csv(file_name)
+    print("CSV loaded successfully.")
+except FileNotFoundError:
+    print(f"❌ ERROR: '{file_name}' not found.")
+    print("Make sure the file is in the same folder as this Python script.")
+    exit()
+
+# ---------------------------------------
+# Convert date column
+# ---------------------------------------
+df['date'] = pd.to_datetime(df['date'])
+
+# ---------------------------------------
+# Display Basic Info
+# ---------------------------------------
+print("\n--- DATA HEAD ---")
+print(df.head())
+
+print("\n--- SUMMARY STATISTICS ---")
+print(df.describe())
+
+# ---------------------------------------
+# Plot 1: Daily Energy Consumption
+# ---------------------------------------
+plt.figure(figsize=(12, 6))
+plt.plot(df['date'], df['energy_kwh'], marker='o', linestyle='--')
+plt.title("Daily Energy Consumption (kWh)")
+plt.xlabel("Date")
+plt.ylabel("Energy (kWh)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# ---------------------------------------
+# Plot 2: Peak Load
+# ---------------------------------------
+plt.figure(figsize=(12, 6))
+plt.plot(df['date'], df['peak_load_kw'], marker='s', linestyle='--')
+plt.title("Peak Load (kW)")
+plt.xlabel("Date")
+plt.ylabel("Peak Load (kW)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# ---------------------------------------
+# Plot 3: Temperature vs Energy Comparison
+# ---------------------------------------
+plt.figure(figsize=(12, 6))
+plt.plot(df['date'], df['temperature_c'], marker='o', label="Temperature (°C)")
+plt.plot(df['date'], df['energy_kwh'], marker='s', label="Energy (kWh)")
+plt.title("Temperature vs Energy Consumption")
+plt.xlabel("Date")
+plt.ylabel("Values")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# ---------------------------------------
+# Plot 4: Humidity Trend
+# ---------------------------------------
+plt.figure(figsize=(12, 6))
+plt.plot(df['date'], df['humidity_%'], marker='o', color='green')
+plt.title("Humidity Trend (%)")
+plt.xlabel("Date")
+plt.ylabel("Humidity (%)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+print("\nAnalysis complete.")
